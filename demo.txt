@@ -1,0 +1,80 @@
+import React, { useState } from 'react';
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  return (
+    <div className="bg-background min-h-screen font-sans">
+      <nav className="bg-primary text-white p-4 shadow-lg">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="text-2xl font-bold">MyWebsite</div>
+          <ul className="flex space-x-4">
+            <li className="hover:text-accent transition-colors duration-300">
+              Home
+            </li>
+            <li className="hover:text-accent transition-colors duration-300">
+              About Us
+            </li>
+            {isLoggedIn ? (
+              <>
+                <li className="hover:text-accent transition-colors duration-300">
+                  Profile
+                </li>
+                <li
+                  className="hover:text-accent transition-colors duration-300 cursor-pointer"
+                  onClick={() => setIsLoggedIn(false)}
+                >
+                  Log Out
+                </li>
+              </>
+            ) : (
+              <li
+                className="hover:text-accent transition-colors duration-300 cursor-pointer"
+                onClick={() => setIsLoggedIn(true)}
+              >
+                Log In / Sign Up
+              </li>
+            )}
+          </ul>
+        </div>
+      </nav>
+
+      <header className="bg-secondary text-black p-20 text-center shadow-soft">
+        <h1 className="text-5xl mb-4 animate-ping-slow">Welcome to MyWebsite</h1>
+        <p className="text-lg">Your gateway to an amazing experience.</p>
+      </header>
+
+      <main className="container mx-auto mt-10 p-4">
+        <section className="text-center mb-10">
+          <h2 className="text-4xl font-bold mb-6 text-primary">Features</h2>
+          <p className="text-muted">
+            Explore the incredible features that make our platform unique.
+          </p>
+        </section>
+
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-500">
+            <h3 className="text-2xl font-bold mb-4">Feature One</h3>
+            <p className="text-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </div>
+          <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-500">
+            <h3 className="text-2xl font-bold mb-4">Feature Two</h3>
+            <p className="text-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </div>
+          <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-500">
+            <h3 className="text-2xl font-bold mb-4">Feature Three</h3>
+            <p className="text-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default App;
