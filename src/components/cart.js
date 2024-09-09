@@ -1,17 +1,40 @@
+// src/components/Cart.js
 import React, { useState } from "react";
 import MealModal from "../components/mealModal";
 
-const Cart = ({
-  items,
-  onSelectMeal,
-  onAddMeal,
-  onDeleteMeal,       // Receive handleDeleteMeal from props
-  onDeleteProduct,    // Receive handleDeleteProduct from props
-}) => {
+const Cart = ({ items, selectedProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(items || {});
 
-  const handleSelectMeal = (mealName) => {
-    onSelectMeal(mealName);
+  const handleAddMeal = (mealName) => {
+    setCartItems((prevItems) => ({
+      ...prevItems,
+      [mealName]: prevItems[mealName] || [], 
+    }));
+  };
+
+  const handleAddProduct = (mealName) => {
+    setCartItems((prevItems) => ({
+      ...prevItems,
+      [mealName]: [...(prevItems[mealName] || []), selectedProduct],
+    }));
+  };
+
+  const handleDeleteMeal = (mealName) => {
+    setCartItems((prevItems) => {
+      const updatedItems = { ...prevItems };
+      delete updatedItems[mealName];
+      return updatedItems;
+    });
+  };
+
+  const handleDeleteProduct = (mealName, productIndex) => {
+    setCartItems((prevItems) => ({
+      ...prevItems,
+      [mealName]: prevItems[mealName].filter(
+        (_, index) => index !== productIndex
+      ), 
+    }));
   };
 
   return (
@@ -25,20 +48,15 @@ const Cart = ({
         Add Meal
       </button>
 
-      {Object.keys(items).length === 0 ? (
+      {Object.keys(cartItems).length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        Object.entries(items).map(([meal, products], index) => (
+        Object.entries(cartItems).map(([meal, products], index) => (
           <div key={index} className="mb-4">
             <div className="flex justify-between items-center">
-              <h3
-                className="text-lg font-bold text-gray-800 cursor-pointer"
-                onClick={() => handleSelectMeal(meal)}
-              >
-                {meal}
-              </h3>
+              <h3 className="text-lg font-bold text-gray-800">{meal}</h3>
               <button
-                onClick={() => onDeleteMeal(meal)} // Use the delete handler from props
+                onClick={() => handleDeleteMeal(meal)}
                 className="bg-red-500 text-white py-1 px-3 rounded-md"
               >
                 Delete
@@ -55,7 +73,7 @@ const Cart = ({
                   >
                     {product}
                     <button
-                      onClick={() => onDeleteProduct(meal, productIndex)} // Use the delete product handler from props
+                      onClick={() => handleDeleteProduct(meal, productIndex)}
                       className="text-red-500 hover:text-red-700 ml-4"
                     >
                       🗑️
@@ -64,6 +82,12 @@ const Cart = ({
                 ))}
               </ul>
             )}
+            <button
+              onClick={() => handleAddProduct(meal)}
+              className="bg-blue-500 text-white py-1 px-3 rounded-md mt-2"
+            >
+              Add Product to {meal}
+            </button>
           </div>
         ))
       )}
@@ -72,7 +96,7 @@ const Cart = ({
       <MealModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onAddMeal={onAddMeal} // Use the add meal handler from props
+        onAddMeal={handleAddMeal}
       />
     </div>
   );

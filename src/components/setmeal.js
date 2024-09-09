@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const SetMealPlan = ({ onAddToCart }) => {
   const [productName, setProductName] = useState("");
   const [productGrams, setProductGrams] = useState("");
-  const [setSelectedProduct] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState("");
 
   const handleAddProduct = () => {
     if (productName) {
@@ -43,7 +43,7 @@ const SetMealPlan = ({ onAddToCart }) => {
           onChange={(e) => setProductGrams(e.target.value)}
           placeholder="Enter grams"
           className="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition ease-in-out duration-150"
-        />    
+        />
       </div>
       <button
         type="button"

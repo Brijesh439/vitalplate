@@ -1,69 +1,47 @@
+// src/components/MealModal.js
 import React, { useState } from "react";
-import SetMealPlan from "../components/setmeal";
-import Cart from "../components/cart";
 
-const MealPlanner = () => {
-  const [cartItems, setCartItems] = useState({});
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [selectedMeal, setSelectedMeal] = useState(""); 
+const MealModal = ({ isOpen, onClose, onAddMeal }) => {
+  const [mealName, setMealName] = useState("");
 
-  const handleAddToCart = (productName) => {
-    setSelectedProduct(productName);
-
-    if (selectedMeal) {
-      setCartItems((prevItems) => ({
-        ...prevItems,
-        [selectedMeal]: [...(prevItems[selectedMeal] || []), productName],
-      }));
+  const handleSubmit = () => {
+    if (mealName) {
+      onAddMeal(mealName); // Call onAddMeal with the mealName
+      setMealName("");
+      onClose(); // Close the modal after adding the meal
     }
   };
 
-  const handleSelectMeal = (mealName) => {
-    setSelectedMeal(mealName);
-  };
-
-  const handleAddMeal = (mealName) => {
-    setCartItems((prevItems) => ({
-      ...prevItems,
-      [mealName]: prevItems[mealName] || [], 
-    }));
-  };
-
-  const handleDeleteMeal = (mealName) => {
-    setCartItems((prevItems) => {
-      const updatedItems = { ...prevItems };
-      delete updatedItems[mealName];
-      return updatedItems;
-    });
-  };
-
-  const handleDeleteProduct = (mealName, productIndex) => {
-    setCartItems((prevItems) => ({
-      ...prevItems,
-      [mealName]: prevItems[mealName].filter(
-        (_, index) => index !== productIndex
-      ), 
-    }));
-  };
+  if (!isOpen) return null;
 
   return (
-    <div className="p-6 flex space-x-6">
-      <div className="w-1/4">
-        <Cart
-          items={cartItems}
-          selectedProduct={selectedProduct}
-          onSelectMeal={handleSelectMeal}
-          onAddMeal={handleAddMeal}         
-          onDeleteMeal={handleDeleteMeal}   
-          onDeleteProduct={handleDeleteProduct} 
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl font-bold mb-4">Add Meal</h2>
+        <input
+          type="text"
+          value={mealName}
+          onChange={(e) => setMealName(e.target.value)}
+          placeholder="Enter meal name"
+          className="block w-full p-2 border border-gray-300 rounded-md mb-4"
         />
-      </div>
-      <div className="w-3/4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Meal Planner</h1>
-        <SetMealPlan onAddToCart={handleAddToCart} />
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="bg-green-500 text-white py-2 px-4 rounded-md"
+        >
+          Add Meal
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="bg-gray-500 text-white py-2 px-4 rounded-md ml-2"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );
 };
 
-export default MealPlanner;
+export default MealModal;
