@@ -9,8 +9,8 @@ const Button = ({ children, onClick, className = '', variant = 'default', size =
     : 'bg-black text-white hover:bg-white hover:text-black';
 
   const sizeClass = size === 'icon'
-    ? 'h-12 w-12'  // Larger icon button
-    : 'h-12 px-6 py-3';  // Larger button with more padding
+    ? 'h-12 w-12'  
+    : 'h-12 px-6 py-3';  
 
   return (
     <button className={`${baseClass} ${variantClass} ${sizeClass} ${className}`} onClick={onClick}>
@@ -186,7 +186,7 @@ const NutrientProfile = ({ nutrients }) => (
 const IngredientsComponent = ({ onAddIngredient, selectedMealId, selectedMeal }) => {
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientWeight, setIngredientWeight] = useState('');
-  const [nutrients, setNutrients] = useState({
+  const [nutrients] = useState({        //const [nutrients, setNutrients] = useState({ if needed 
     calories: 0,
     protein: 0,
     carbs: 0,

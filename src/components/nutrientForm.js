@@ -31,7 +31,7 @@ const NutrientForm = ({ onSubmit, isEditing, isEditingfunction, initialData, onC
     // Handle form submission
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formData); // Submit the form data
+        onSubmit(formData);
     };
 
     const renderFields = (fields) => {

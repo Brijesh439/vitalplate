@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import HistoryForm from '../components/historyform';
 import NutrientForm from '../components/nutrientForm';
-import Button from '../components/button'; // Currently unused but kept if needed later
 
 
 const CustomerTabs = ({ customers, onSelectCustomer, onAddCustomer }) => {
@@ -68,14 +67,6 @@ const FormPage = () => {
 
     const halfWidthStyle = {
         width: '50%',
-    };
-
-    const submittedDataStyle = {
-        marginTop: '24px',
-        backgroundColor: '#f3f4f6', // gray-100
-        padding: '16px',
-        borderRadius: '8px',
-        border: '1px solid #d1d5db', // gray-300
     };
 
 
