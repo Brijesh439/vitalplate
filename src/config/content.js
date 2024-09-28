@@ -93,8 +93,6 @@ export const loginContent = {
   illustration: "/assets/image/doctor_Illustration.png",
 };
 
-// src/config/content.js
-
 export const historyFormConfig = {
   personalInformation: [
     { label: "Name", type: "text", name: "name" },
@@ -178,8 +176,6 @@ export const historyFormConfig = {
   ],
 };
 
-// src/config/content.js
-
 export const nutrientFormConfig = {
   macronutrients: [
     { name: "carbohydrates", label: "Carbohydrates" },
@@ -203,7 +199,3 @@ export const nutrientFormConfig = {
     { name: "zinc", label: "Zinc" },
   ],
 };
-
-// config/content.js
-
-// config/content.js

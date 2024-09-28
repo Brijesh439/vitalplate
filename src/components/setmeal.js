@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const SetMealPlan = ({ onAddToCart }) => {
   const [productName, setProductName] = useState("");
   const [productGrams, setProductGrams] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState("");
+  const [setSelectedProduct] = useState("");  // const [selectedProduct, setSelectedProduct] = useState(""); if needed
 
   const handleAddProduct = () => {
     if (productName) {
