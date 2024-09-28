@@ -241,7 +241,7 @@ const DayNutritionPlan = () => {
             <div className="space-x-5 mt-4">
               <Button
                 variant="primary"
-                className="bg-black hover:bg-white text-white hover:text-black"
+                className="bg-black hover:bg-white text-white hover:text-black p-2"
                 onClick={() => handleAdjustNutrition(meal)}
                 disabled={lockedMeals[meal]}
               >

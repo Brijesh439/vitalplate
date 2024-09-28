@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { nutrientFormConfig } from "../config/content";
-import Button from "../components/button";
-
-const scrollableStyle = {
-  maxHeight: "400px",
-  overflowY: "auto",
-  paddingRight: "10px",
-  scrollbarWidth: "thin",
-};
+import React, { useState, useEffect } from 'react';
+import { nutrientFormConfig } from '../config/content';
+import Button from '../components/button';
 
 const NutrientForm = ({ onSubmit, initialData }) => {
   const [formData, setFormData] = useState(initialData || {});
 
-  // Populate the form with initial data if it changes (e.g., when switching between customers)
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
     }
   }, [initialData]);
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -28,49 +19,61 @@ const NutrientForm = ({ onSubmit, initialData }) => {
     }));
   };
 
-  // Handle form submission
-  const handleFormSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData); // Pass data to parent component
+    onSubmit(formData);
+  };
+
+  const handleReset = () => {
+    setFormData(initialData || {}); // Reset to initialData or clear form fields
   };
 
   const renderFields = (fields) => {
     return fields.map((field) => (
       <div key={field.name} className="mb-6">
-        <label className="block text-gray-800 text-sm font-medium mb-2" htmlFor={field.name}>
+        <label
+          className="block text-sm font-semibold text-gray-700 mb-2"
+          htmlFor={field.name}
+        >
           {field.label}
         </label>
         <input
           type="number"
           id={field.name}
           name={field.name}
-          value={formData[field.name] || ""}
+          value={formData[field.name] || ''}
           onChange={handleChange}
-          className="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition ease-in-out duration-150"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 p-2"
         />
       </div>
     ));
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Nutrition Form</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div style={scrollableStyle} className="space-y-6">
-          {/* Render Macronutrients */}
-          <div className="border-t border-gray-300 pt-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Macronutrient Intake</h3>
-            {renderFields(nutrientFormConfig.macronutrients)}
+    <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl mx-auto h-[80vh]">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Nutrition Information</h2>
+      <form onSubmit={handleSubmit} className="overflow-y-auto h-[65vh]">
+        {Object.entries(nutrientFormConfig).map(([section, fields]) => (
+          <div key={section} className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {section}
+            </h3>
+            {renderFields(fields)}
           </div>
-          {/* Render Micronutrients */}
-          <div className="border-t border-gray-300 pt-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Micronutrient Intake</h3>
-            {renderFields(nutrientFormConfig.micronutrients)}
-          </div>
-        </div>
-        <div className="mt-6 flex gap-4">
-          <Button type="primary" onClick={handleFormSubmit}>
-            Save
+        ))}
+        <div className="flex justify-between">
+          <Button
+            type="button"
+            onClick={handleReset}
+            className="bg-black hover:bg-white text-white hover:text-black p-2 rounded"
+          >
+            Reset
+          </Button>
+          <Button
+            type="submit"
+            className="bg-black hover:bg-white text-white hover:text-black p-2 rounded"
+          >
+            Save Nutrition Info
           </Button>
         </div>
       </form>

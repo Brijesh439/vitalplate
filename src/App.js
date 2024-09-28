@@ -7,6 +7,7 @@ import MealPlanner from "./pages/meal";
 import DayNutritionPlan from "./pages/daynutritionplan";
 // import Header from './components/header';
 // import HeaderL from './components/headerlogin';
+import NutritionSearch from "./pages/openai";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         {/* <Header/>
           <HeaderL/> */}
         <DayNutritionPlan/>
+        <NutritionSearch/>
       </div>
     </Router>
   );
