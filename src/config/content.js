@@ -24,9 +24,6 @@ export const headerContent = {
   },
 };
 
-
-  
-
 //Header for only login page header
 export const headerLogin = {
   logo: {
