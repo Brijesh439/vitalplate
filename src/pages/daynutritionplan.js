@@ -3,6 +3,7 @@ import { nutrientFormConfig } from "../config/content";
 import Button from "../components/button";
 import { Lock, Unlock } from "lucide-react";
 import ReactDOM from "react-dom";
+import Sidebar from "../components/sidebar";
 
 const DayNutritionPlan = () => {
   const initialNutritionData = {
@@ -29,11 +30,14 @@ const DayNutritionPlan = () => {
     if (!isVisible) return null;
 
     return ReactDOM.createPortal(
-      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-          <div className="flex justify-end">
-            <button onClick={onClose} className="text-black">
-              Close
+      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 relative">
+          <div className="absolute top-2 right-2">
+            <button
+              onClick={onClose}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              ✖
             </button>
           </div>
           {children}
@@ -104,7 +108,6 @@ const DayNutritionPlan = () => {
       },
     }));
 
-    // Get unlocked meals
     const unlockedMeals = ["breakfast", "lunch", "dinner"].filter(
       (m) => m !== meal && !lockedMeals[m]
     );
@@ -124,7 +127,6 @@ const DayNutritionPlan = () => {
         }));
       });
     } else {
-      // If all other meals are locked, adjust the current meal back to maintain total
       setAdjustedMealPlans((prev) => ({
         ...prev,
         [meal]: {
@@ -144,7 +146,6 @@ const DayNutritionPlan = () => {
         parseFloat(adjustedMealPlans.dinner[nutrient]);
       const difference = (totalAdjusted - nutritionData[nutrient]).toFixed(2);
       if (Math.abs(difference) > 0.01) {
-        // Allow for small floating point errors
         newImbalances[nutrient] = difference;
       }
     });
@@ -159,7 +160,6 @@ const DayNutritionPlan = () => {
       setAdjustingMeal("");
       setShowAlert(false);
 
-      // well-balanced nutrients
       const nutrients = Object.entries(nutritionData)
         .map(([nutrient, value]) => {
           return `${
@@ -171,7 +171,6 @@ const DayNutritionPlan = () => {
         })
         .join("\n");
 
-      // Set nutrients and show modal
       setWellBalancedNutrients(nutrients);
       setModalVisible(true);
     } else {
@@ -187,91 +186,98 @@ const DayNutritionPlan = () => {
   };
 
   return (
-    <div className="p-6 ">
-      <h2 className="text-2xl font-bold mb-4">Day Nutrition Plan</h2>
-      <div className="p-6 flex justify-center space-x-10">
-        <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
-          <h3 className="text-xl font-semibold mb-4">Day Nutrition Need</h3>
-          <ul>
-            {Object.entries(nutritionData).map(([key, value]) => (
-              <li key={key} className="text-gray-700 mb-2">
-                {nutrientFormConfig.macronutrients.find((n) => n.name === key)
-                  ?.label ||
-                  nutrientFormConfig.micronutrients.find((n) => n.name === key)
-                    ?.label}
-                : {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {["breakfast", "lunch", "dinner"].map((meal) => (
-          <div key={meal} className="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold">
-                {meal.charAt(0).toUpperCase() + meal.slice(1)} Nutrition Need
-              </h3>
-            </div>
-            <ul>
-              {Object.entries(
-                isAdjusting ? adjustedMealPlans[meal] : mealPlans[meal]
-              ).map(([key, value]) => (
-                <li key={key} className="text-gray-700 mb-2">
+    <div className="flex min-h-screen">
+      <Sidebar className="w-1/4" />
+      <div className="flex-grow p-8 bg-gray-100">
+        <h2 className="text-3xl font-bold mb-6 text-center">Day Nutrition Plan</h2>
+        <div className="p-6 flex justify-center space-x-10">
+          <div className="bg-white shadow-xl rounded-lg p-8">
+            <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+              Day Nutrition Need
+            </h3>
+            <ul className="space-y-2">
+              {Object.entries(nutritionData).map(([key, value]) => (
+                <li key={key} className="text-gray-700">
                   {nutrientFormConfig.macronutrients.find((n) => n.name === key)
                     ?.label ||
-                    nutrientFormConfig.micronutrients.find(
-                      (n) => n.name === key
-                    )?.label}
+                    nutrientFormConfig.micronutrients.find((n) => n.name === key)
+                      ?.label}
                   : {value}
-                  {isAdjusting &&
-                    adjustingMeal === meal &&
-                    !lockedMeals[meal] && (
-                      <input
-                        type="number"
-                        value={value}
-                        onChange={(e) =>
-                          handleNutritionChange(key, e.target.value, meal)
-                        }
-                        className="ml-2 w-20 border rounded"
-                      />
-                    )}
                 </li>
               ))}
             </ul>
-            <div className="space-x-5 mt-4">
-              <Button
-                variant="primary"
-                className="bg-black hover:bg-white text-white hover:text-black p-2"
-                onClick={() => handleAdjustNutrition(meal)}
-                disabled={lockedMeals[meal]}
-              >
-                Adjust Nutrition
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => handleLockToggle(meal)}
-                className="bg-black hover:bg-white text-white hover:text-black p-2"
-              >
-                {lockedMeals[meal] ? <Lock size={16} /> : <Unlock size={16} />}
-              </Button>
-            </div>
           </div>
-        ))}
-      </div>
-      <div className="mt-6 flex justify-center">
-        <Button
-          onClick={handleSubmitChanges}
-          className="bg-black hover:bg-white text-white hover:text-black p-2"
-        >
-          Submit Changes
-        </Button>
-      </div>
 
-      {/* Modal Component */}
-      <Modal isVisible={isModalVisible} onClose={() => setModalVisible(false)}>
-        <h3 className="text-lg font-semibold mb-4">Well-Balanced Nutrients, Changes submitted</h3>
-        <pre className="text-sm">{wellBalancedNutrients}</pre>
-      </Modal>
+          {["breakfast", "lunch", "dinner"].map((meal) => (
+            <div key={meal} className="bg-white shadow-xl rounded-lg p-8">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-2xl font-semibold text-gray-800">
+                  {meal.charAt(0).toUpperCase() + meal.slice(1)} Nutrition
+                </h3>
+              </div>
+              <ul className="space-y-2">
+                {Object.entries(
+                  isAdjusting ? adjustedMealPlans[meal] : mealPlans[meal]
+                ).map(([key, value]) => (
+                  <li key={key} className="text-gray-700">
+                    {nutrientFormConfig.macronutrients.find((n) => n.name === key)
+                      ?.label ||
+                      nutrientFormConfig.micronutrients.find(
+                        (n) => n.name === key
+                      )?.label}
+                    : {value}
+                    {isAdjusting &&
+                      adjustingMeal === meal &&
+                      !lockedMeals[meal] && (
+                        <input
+                          type="number"
+                          value={value}
+                          onChange={(e) =>
+                            handleNutritionChange(key, e.target.value, meal)
+                          }
+                          className="ml-2 w-20 border rounded-md p-1"
+                        />
+                      )}
+                  </li>
+                ))}
+              </ul>
+              <div className="space-x-4 mt-4">
+                <Button
+                  variant="primary"
+                  className="bg-gray-800 hover:bg-gray-900 text-white p-2"
+                  onClick={() => handleAdjustNutrition(meal)}
+                  disabled={lockedMeals[meal]}
+                >
+                  Adjust
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => handleLockToggle(meal)}
+                  className="bg-gray-800 hover:bg-gray-900 text-white p-2"
+                >
+                  {lockedMeals[meal] ? <Lock size={16} /> : <Unlock size={16} />}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 flex justify-center">
+          <Button
+            onClick={handleSubmitChanges}
+            className="bg-gray-800 hover:bg-gray-900 text-white p-2"
+          >
+            Submit Changes
+          </Button>
+        </div>
+
+        {/* Modal Component */}
+        <Modal isVisible={isModalVisible} onClose={() => setModalVisible(false)}>
+          <h3 className="text-lg font-semibold mb-4 text-center">
+            Well-Balanced Nutrients, Changes submitted
+          </h3>
+          <pre className="text-sm">{wellBalancedNutrients}</pre>
+        </Modal>
+      </div>
     </div>
   );
 };

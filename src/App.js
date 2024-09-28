@@ -8,18 +8,20 @@ import DayNutritionPlan from "./pages/daynutritionplan";
 // import Header from './components/header';
 // import HeaderL from './components/headerlogin';
 import NutritionSearch from "./pages/openai";
+import Sidebar from "./components/sidebar";
 
 const App = () => {
   return (
     <Router>
       <div className="App">
-        <Login />
-        <FormPage />
-        <DayNutritionPlan/>
+        {/* <Login /> */}
+        {/* <FormPage /> */}
+        {/* <DayNutritionPlan/> */}
         <MealPlanner />
-        <NutritionSearch/>
+        {/* <NutritionSearch/> */}
         {/* <Header/>
           <HeaderL/> */}
+          {/* <Sidebar/> */}
       </div>
     </Router>
   );

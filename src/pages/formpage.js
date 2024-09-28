@@ -3,6 +3,7 @@ import HistoryForm from "../components/historyform";
 import NutrientForm from "../components/nutrientForm";
 import Button from "../components/button";
 import PopupForm from "../components/popform";
+import Sidebar from "../components/sidebar";
 
 const CustomerTabs = ({ customers, onSelectCustomer, onAddCustomer }) => (
   <div className="flex gap-4 overflow-x-auto pb-4 mb-6">
@@ -90,46 +91,49 @@ const FormPage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
-      <CustomerTabs
-        customers={customers}
-        onSelectCustomer={handleSelectCustomer}
-        onAddCustomer={() => setIsPopupOpen(true)}
-      />
-      {isPopupOpen && (
-        <PopupForm
-          onClose={() => setIsPopupOpen(false)}
-          onAddCustomer={handleAddCustomer}
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="max-w-7xl mx-auto p-8 w-full overflow-y-auto">
+        <CustomerTabs
+          customers={customers}
+          onSelectCustomer={handleSelectCustomer}
+          onAddCustomer={() => setIsPopupOpen(true)}
         />
-      )}
-      {selectedCustomer && (
-        <div className="flex flex-col lg:flex-row gap-8 justify-center items-start">
-          <div className="bg-white p-6 rounded-lg w-full lg:w-1/2">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              History Form
-            </h2>
-            <HistoryForm
-              onSubmit={handleHistoryFormSubmit}
-              initialData={selectedCustomer.historyData}
-              isEditable={isHistoryEditable}
-              onToggleEdit={toggleHistoryEdit}
-            />
-          </div>
-          {isHistorySaved && (
-            <div className="bg-white p-6 rounded-lg w-full lg:w-1/2">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-                Nutrition Form
+        {isPopupOpen && (
+          <PopupForm
+            onClose={() => setIsPopupOpen(false)}
+            onAddCustomer={handleAddCustomer}
+          />
+        )}
+        {selectedCustomer && (
+          <div className="flex flex-col lg:flex-row gap-8 justify-center items-start mt-8">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/2">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                History Form
               </h2>
-              <NutrientForm
-                onSubmit={handleNutritionFormSubmit}
-                initialData={selectedCustomer.nutritionData}
-                isEditable={isNutritionEditable}
-                onToggleEdit={toggleNutritionEdit}
+              <HistoryForm
+                onSubmit={handleHistoryFormSubmit}
+                initialData={selectedCustomer.historyData}
+                isEditable={isHistoryEditable}
+                onToggleEdit={toggleHistoryEdit}
               />
             </div>
-          )}
-        </div>
-      )}
+            {isHistorySaved && (
+              <div className="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/2">
+                <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                  Nutrition Form
+                </h2>
+                <NutrientForm
+                  onSubmit={handleNutritionFormSubmit}
+                  initialData={selectedCustomer.nutritionData}
+                  isEditable={isNutritionEditable}
+                  onToggleEdit={toggleNutritionEdit}
+                />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
