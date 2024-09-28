@@ -3,7 +3,6 @@ import { nutrientFormConfig } from "../config/content";
 import Button from "../components/button";
 import { Lock, Unlock } from "lucide-react";
 import ReactDOM from "react-dom";
-import Sidebar from "../components/sidebar";
 
 const DayNutritionPlan = () => {
   const initialNutritionData = {
@@ -187,7 +186,6 @@ const DayNutritionPlan = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar className="w-1/4" />
       <div className="flex-grow p-8 bg-gray-100">
         <h2 className="text-3xl font-bold mb-6 text-center">Day Nutrition Plan</h2>
         <div className="p-6 flex justify-center space-x-10">

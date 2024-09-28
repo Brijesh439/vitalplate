@@ -3,7 +3,6 @@ import HistoryForm from "../components/historyform";
 import NutrientForm from "../components/nutrientForm";
 import Button from "../components/button";
 import PopupForm from "../components/popform";
-import Sidebar from "../components/sidebar";
 
 const CustomerTabs = ({ customers, onSelectCustomer, onAddCustomer }) => (
   <div className="flex gap-4 overflow-x-auto pb-4 mb-6">
@@ -92,7 +91,6 @@ const FormPage = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar />
       <div className="max-w-7xl mx-auto p-8 w-full overflow-y-auto">
         <CustomerTabs
           customers={customers}

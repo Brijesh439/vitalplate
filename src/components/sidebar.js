@@ -9,11 +9,13 @@ const Sidebar = () => {
     setIsExpanded(!isExpanded);
   };
 
+  // Updated navItems with provided paths and corresponding labels
   const navItems = [
-    { icon: <Home />, label: 'Home', path: '/' },
-    { icon: <User />, label: 'Profile', path: '/profile' },
-    { icon: <Settings />, label: 'Settings', path: '/settings' },
-    { icon: <HelpCircle />, label: 'Help', path: '/help' },
+    { icon: <Home />, label: 'Login', path: '/' }, // Assuming this is the Login Page
+    { icon: <User />, label: 'Form Page', path: '/form' }, // Form Page
+    { icon: <Settings />, label: 'Meal Planner', path: '/meal' }, // Meal Planner
+    { icon: <HelpCircle />, label: 'Day Nutrition Plan', path: '/daynutritionplan' }, // Day Nutrition Plan
+    { icon: <HelpCircle />, label: 'Nutrition Search', path: '/nutritionsearch' }, // Nutrition Search
   ];
 
   return (

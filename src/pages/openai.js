@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar";
 
 const NutritionSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,8 +53,6 @@ const NutritionSearch = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar className="w-1/4 h-screen sticky top-0 border-r border-gray-200" />
 
       {/* Main Content */}
       <div className="w-3/4 p-8">
