@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Login from "./pages/login";
 import FormPage from "./pages/formpage";
 import MealPlanner from "./pages/meal";
+import DayNutritionPlan from "./pages/daynutritionplan";
 // import Header from './components/header';
 // import HeaderL from './components/headerlogin';
 
@@ -16,6 +17,7 @@ const App = () => {
         <MealPlanner />
         {/* <Header/>
           <HeaderL/> */}
+        <DayNutritionPlan/>
       </div>
     </Router>
   );

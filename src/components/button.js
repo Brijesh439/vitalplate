@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const Button = ({ type = 'primary', href, className, children, ...props }) => {
     const baseStyle = 'py-2 px-4 font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2';
     const typeStyles = {
-        primary: 'bg-primary text-white hover:bg-primary-dark',
+        primary: '"bg-black hover:bg-white text-white hover:text-black',
         secondary: 'bg-secondary text-gray-900 hover:bg-secondary-dark',
         accent: 'bg-accent text-white hover:bg-accent-dark',
         danger: 'bg-danger text-white hover:bg-danger-dark',

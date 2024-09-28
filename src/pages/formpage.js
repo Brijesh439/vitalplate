@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import HistoryForm from "../components/historyform";
 import NutrientForm from "../components/nutrientForm";
+import Button from "../components/button";
 
 const CustomerTabs = ({ customers, onSelectCustomer, onAddCustomer }) => {
   const scrollableTabsStyle = {
@@ -11,39 +12,42 @@ const CustomerTabs = ({ customers, onSelectCustomer, onAddCustomer }) => {
     whiteSpace: "nowrap",
   };
 
-  const tabButtonStyle = {
-    display: "inline-block",
-    padding: "10px",
-    backgroundColor: "white",
-    border: "1px solid #d1d5db", // gray-300
-    borderRadius: "8px",
-    margin: "0 10px",
-  };
+  //   const tabButtonStyle = {
+  //     display: 'inline-block',
+  //     padding: '10px',
+  //     backgroundColor: 'white',
+  //     border: '1px solid #d1d5db', // gray-300
+  //     borderRadius: '8px',
+  //     margin: '0 10px',
+  //   };
 
-  const addCustomerButtonStyle = {
-    display: "inline-block",
-    padding: "10px",
-    backgroundColor: "#3b82f6", // blue-500
-    color: "white",
-    borderRadius: "8px",
-    margin: "0 10px",
-  };
+  //   const addCustomerButtonStyle = {
+  //     display: 'inline-block',
+  //     padding: '10px',
+  //     backgroundColor: '#3b82f6', // blue-500
+  //     color: 'white',
+  //     borderRadius: '8px',
+  //     margin: '0 10px',
+  //   };
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6">
       <div style={scrollableTabsStyle}>
         {customers.map((customer, index) => (
-          <button
+          <Button
+            className="bg-black hover:bg-white text-white hover:text-black"
             key={index}
-            style={tabButtonStyle}
             onClick={() => onSelectCustomer(customer)}
           >
             {customer.name}
-          </button>
+          </Button>
         ))}
-        <button style={addCustomerButtonStyle} onClick={onAddCustomer}>
+        <Button
+          onClick={onAddCustomer}
+          className="bg-black hover:bg-white text-white hover:text-black"
+        >
           + Add Customer Profile
-        </button>
+        </Button>
       </div>
     </div>
   );
