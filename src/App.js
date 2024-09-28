@@ -15,11 +15,11 @@ const App = () => {
       <div className="App">
         <Login />
         <FormPage />
+        <DayNutritionPlan/>
         <MealPlanner />
+        <NutritionSearch/>
         {/* <Header/>
           <HeaderL/> */}
-        <DayNutritionPlan/>
-        <NutritionSearch/>
       </div>
     </Router>
   );

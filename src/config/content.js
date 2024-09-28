@@ -94,14 +94,14 @@ export const historyFormConfig = {
   personalInformation: [
     { label: "Name", type: "text", name: "name" },
     { label: "Age", type: "number", name: "age" },
+    { label: "Height", type: "number", name: "height" },
+    { label: "Weight", type: "number", name: "weight" },
     {
       label: "Gender",
       type: "select",
       name: "gender",
       options: ["Male", "Female", "Other"],
     },
-    { label: "Height", type: "number", name: "height" },
-    { label: "Weight", type: "number", name: "weight" },
     { label: "Occupation", type: "text", name: "occupation" },
     {
       label: "Involved in any Exercise or Sport",

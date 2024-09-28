@@ -25,7 +25,7 @@ const NutrientForm = ({ onSubmit, initialData }) => {
   };
 
   const handleReset = () => {
-    setFormData(initialData || {}); // Reset to initialData or clear form fields
+    setFormData(initialData || {});
   };
 
   const renderFields = (fields) => {
@@ -55,9 +55,7 @@ const NutrientForm = ({ onSubmit, initialData }) => {
       <form onSubmit={handleSubmit} className="overflow-y-auto h-[65vh]">
         {Object.entries(nutrientFormConfig).map(([section, fields]) => (
           <div key={section} className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {section}
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{section}</h3>
             {renderFields(fields)}
           </div>
         ))}
