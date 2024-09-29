@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 import {
   PlusCircle,
@@ -234,7 +234,7 @@ const NutrientBar = ({ name, value, max }) => (
     </div>
     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
       <div
-        className="bg-blue-600 h-2.5 rounded-full"
+        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
         style={{ width: `${Math.min((value / max) * 100, 100)}%` }}
       ></div>
     </div>
@@ -376,11 +376,18 @@ const IngredientsComponent = ({
         value={ingredientName}
         onChange={(e) => setIngredientName(e.target.value)}
       />
+      <div className="flex space-x-2">
       <Input
         placeholder="Enter weight (g)"
         value={ingredientWeight}
         onChange={(e) => setIngredientWeight(e.target.value)}
       />
+       <Input
+        placeholder="Enter Unit (g/ml)"
+        value={ingredientWeight}
+        onChange={(e) => setIngredientWeight(e.target.value)}
+      />
+      </div>
       <span className="flex justify-evenly">
         <Button variant="primary" onClick={fetchNutritionData} disabled={isLoading}>
           <Search className="mr-2 h-4 w-4" /> {isLoading ? "Searching..." : "Search"}
@@ -411,6 +418,8 @@ const IngredientsComponent = ({
 const MealPlanner = () => {
   const [meals, setMeals] = useState([]);
   const [selectedMealId, setSelectedMealId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const addMeal = (name) => {
     setMeals((prevMeals) => [
@@ -471,8 +480,72 @@ const MealPlanner = () => {
     [meals, selectedMealId]
   );
 
+  const calculateMealNutrients = (meal) => {
+    return meal.ingredients.reduce(
+      (acc, ingredient) => {
+        Object.keys(acc).forEach((nutrient) => {
+          acc[nutrient] += ingredient.nutrients[nutrient];
+        });
+        return acc;
+      },
+      {
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        fiber: 0,
+        vitaminA: 0,
+        vitaminC: 0,
+        calcium: 0,
+        iron: 0,
+      }
+    );
+  };
+
+  const fetchMealNutrition = async () => {
+    if (!selectedMeal) return;
+
+    setIsLoading(true);
+    setProgress(0);
+
+    // Fake API call
+    const fakeApiCall = () => {
+      return new Promise((resolve) => {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 10;
+          setProgress(progress);
+          if (progress >= 100) {
+            clearInterval(interval);
+            resolve(calculateMealNutrients(selectedMeal));
+          }
+        }, 200);
+      });
+    };
+
+    try {
+      const result = await fakeApiCall();
+      setMeals((prevMeals) =>
+        prevMeals.map((meal) =>
+          meal.id === selectedMealId ? { ...meal, nutrients: result } : meal
+        )
+      );
+    } catch (error) {
+      console.error("Error fetching meal nutrition data:", error);
+      alert("Failed to fetch meal nutrition data. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedMeal && !selectedMeal.nutrients) {
+      fetchMealNutrition();
+    }
+  }, [selectedMeal]);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
       <MealsComponent
         meals={meals}
         onAddMeal={addMeal}
@@ -487,6 +560,18 @@ const MealPlanner = () => {
         selectedMealId={selectedMealId}
         selectedMeal={selectedMeal}
       />
+      <div className="flex flex-col space-y-4 w-full max-w-md h-[calc(100vh-2rem)]">
+        <CardHeader>
+          <CardTitle>Meal Nutrition Profile</CardTitle>
+        </CardHeader>
+        {isLoading && <ProgressBar progress={progress} />}
+        {!isLoading && selectedMeal && selectedMeal.nutrients && (
+          <NutrientProfile nutrients={selectedMeal.nutrients} />
+        )}
+        {!selectedMeal && (
+          <div className="text-center text-gray-500">Select a meal to view its nutrition profile</div>
+        )}
+      </div>
     </div>
   );
 };
