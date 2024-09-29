@@ -25,7 +25,7 @@ const HistoryForm = ({ onSubmit, initialData }) => {
   };
 
   const handleReset = () => {
-    setFormData(initialData || {});
+    setFormData(initialData || {  });
   };
 
   const renderFields = (fields) => {

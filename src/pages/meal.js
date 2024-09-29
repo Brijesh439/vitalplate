@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
 
-
 import {
   PlusCircle,
   Trash2,
@@ -262,6 +261,15 @@ const NutrientProfile = ({ nutrients }) => (
   </ScrollArea>
 );
 
+const ProgressBar = ({ progress }) => (
+  <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+    <div
+      className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
+      style={{ width: `${progress}%` }}
+    ></div>
+  </div>
+);
+
 const IngredientsComponent = ({
   onAddIngredient,
   selectedMealId,
@@ -269,8 +277,7 @@ const IngredientsComponent = ({
 }) => {
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientWeight, setIngredientWeight] = useState("");
-  const [nutrients] = useState({
-    //const [nutrients, setNutrients] = useState({ if needed
+  const [nutrients, setNutrients] = useState({
     calories: 0,
     protein: 0,
     carbs: 0,
@@ -281,6 +288,50 @@ const IngredientsComponent = ({
     calcium: 0,
     iron: 0,
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const fetchNutritionData = async () => {
+    if (!ingredientName) return;
+
+    setIsLoading(true);
+    setProgress(0);
+
+    // Fake API call
+    const fakeApiCall = () => {
+      return new Promise((resolve) => {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 10;
+          setProgress(progress);
+          if (progress >= 100) {
+            clearInterval(interval);
+            resolve({
+              calories: Math.random() * 500,
+              protein: Math.random() * 50,
+              carbs: Math.random() * 100,
+              fat: Math.random() * 50,
+              fiber: Math.random() * 15,
+              vitaminA: Math.random() * 1000,
+              vitaminC: Math.random() * 100,
+              calcium: Math.random() * 500,
+              iron: Math.random() * 20,
+            });
+          }
+        }, 200);
+      });
+    };
+
+    try {
+      const result = await fakeApiCall();
+      setNutrients(result);
+    } catch (error) {
+      console.error("Error fetching nutrition data:", error);
+      alert("Failed to fetch nutrition data. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAddIngredient = () => {
     if (!selectedMealId) {
@@ -294,13 +345,29 @@ const IngredientsComponent = ({
       id: Math.random().toString(36).substring(7),
       name: ingredientName,
       weight: parseFloat(ingredientWeight),
+      nutrients: nutrients,
     });
     setIngredientName("");
     setIngredientWeight("");
+    setNutrients({
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+      fiber: 0,
+      vitaminA: 0,
+      vitaminC: 0,
+      calcium: 0,
+      iron: 0,
+    });
+  };
+
+  const handleNutrientChange = (nutrient, value) => {
+    setNutrients(prev => ({ ...prev, [nutrient]: parseFloat(value) }));
   };
 
   return (
-    <div className="flex flex-col space-y-4 w-full max-w-md h-[calc(100vh-2rem)] ">
+    <div className="flex flex-col space-y-4 w-full max-w-md h-[calc(100vh-2rem)]">
       <CardHeader>
         <CardTitle>Meal Planner</CardTitle>
       </CardHeader>
@@ -315,12 +382,28 @@ const IngredientsComponent = ({
         onChange={(e) => setIngredientWeight(e.target.value)}
       />
       <span className="flex justify-evenly">
-        <Button variant="primary">
-          <Search className="mr-2 h-4 w-4" /> Search
+        <Button variant="primary" onClick={fetchNutritionData} disabled={isLoading}>
+          <Search className="mr-2 h-4 w-4" /> {isLoading ? "Searching..." : "Search"}
         </Button>
         <Button onClick={handleAddIngredient}>Add Ingredient</Button>
       </span>
-      {selectedMeal && <NutrientProfile nutrients={nutrients} />}
+      {isLoading && <ProgressBar progress={progress} />}
+      {!isLoading && (
+        <ScrollArea className="h-60 w-full">
+          <div className="pr-4">
+            {Object.entries(nutrients).map(([nutrient, value]) => (
+              <div key={nutrient} className="mb-4">
+                <label className="block text-sm font-medium mb-1">{nutrient}</label>
+                <Input
+                  type="number"
+                  value={value.toFixed(2)}
+                  onChange={(e) => handleNutrientChange(nutrient, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      )}
     </div>
   );
 };

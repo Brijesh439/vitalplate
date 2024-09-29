@@ -23,14 +23,11 @@ const CustomerTabs = ({ customers, onSelectCustomer, onAddCustomer }) => (
     </Button>
   </div>
 );
-
+            
 const FormPage = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customers, setCustomers] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isHistorySaved, setIsHistorySaved] = useState(false);
-  const [isHistoryEditable, setIsHistoryEditable] = useState(true);
-  const [isNutritionEditable, setIsNutritionEditable] = useState(true);
 
   const handleAddCustomer = (newCustomer) => {
     const customerWithId = {
@@ -39,7 +36,6 @@ const FormPage = () => {
       historyData: {
         name: newCustomer.name,
         age: newCustomer.age,
-        gender: newCustomer.gender,
         height: newCustomer.height,
         weight: newCustomer.weight,
       },
@@ -48,16 +44,10 @@ const FormPage = () => {
 
     setCustomers([...customers, customerWithId]);
     setSelectedCustomer(customerWithId);
-    setIsHistorySaved(false);
-    setIsHistoryEditable(true);
-    setIsNutritionEditable(true);
   };
 
   const handleSelectCustomer = (customer) => {
     setSelectedCustomer(customer);
-    setIsHistorySaved(customer.historyData !== null);
-    setIsHistoryEditable(customer.historyData === null);
-    setIsNutritionEditable(customer.nutritionData === null);
   };
 
   const handleHistoryFormSubmit = (data) => {
@@ -67,8 +57,6 @@ const FormPage = () => {
       )
     );
     setSelectedCustomer({ ...selectedCustomer, historyData: data });
-    setIsHistorySaved(true);
-    setIsHistoryEditable(false);
   };
 
   const handleNutritionFormSubmit = (data) => {
@@ -78,15 +66,6 @@ const FormPage = () => {
       )
     );
     setSelectedCustomer({ ...selectedCustomer, nutritionData: data });
-    setIsNutritionEditable(false);
-  };
-
-  const toggleHistoryEdit = () => {
-    setIsHistoryEditable((prev) => !prev);
-  };
-
-  const toggleNutritionEdit = () => {
-    setIsNutritionEditable((prev) => !prev);
   };
 
   return (
@@ -112,11 +91,9 @@ const FormPage = () => {
               <HistoryForm
                 onSubmit={handleHistoryFormSubmit}
                 initialData={selectedCustomer.historyData}
-                isEditable={isHistoryEditable}
-                onToggleEdit={toggleHistoryEdit}
               />
             </div>
-            {isHistorySaved && (
+            {selectedCustomer.historyData && (
               <div className="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/2">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">
                   Nutrition Form
@@ -124,8 +101,6 @@ const FormPage = () => {
                 <NutrientForm
                   onSubmit={handleNutritionFormSubmit}
                   initialData={selectedCustomer.nutritionData}
-                  isEditable={isNutritionEditable}
-                  onToggleEdit={toggleNutritionEdit}
                 />
               </div>
             )}

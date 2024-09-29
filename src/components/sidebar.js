@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Home, User, Settings, HelpCircle, Menu } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-
+  
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
 
