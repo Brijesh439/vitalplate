@@ -394,6 +394,7 @@ const IngredientsComponent = ({
         </Button>
         <Button onClick={handleAddIngredient}>Add Ingredient</Button>
       </span>
+      <CardTitle>Ingredients nutrient information </CardTitle>
       {isLoading && <ProgressBar progress={progress} />}
       {!isLoading && (
         <ScrollArea className="h-60 w-full">
